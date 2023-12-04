@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>色読みゲーム</title>
+    <style>
+        #questionArea {
+            text-align: center;
+            width: 500px;
+            background-color: #000000;
+        }
+
+        #question {
+            padding-top: 10px;
+            color: #FFFFFF;
+        }
+
+        #kanji {
+            font-size: 80px;
+            font-weight: bold;
+        }
+
+        #buttonArea {
+            text-align: center;
+            width: 500px;
+            background-color: #999999;
+        }
+
+        button {
+            margin: 5px;
+            width: 60px;
+            height: 60px;
+        }
+
+        #message {
+            color: #cc0000;
+        }
+    </style>
+</head>
+
+<body>
+    <p>色読みゲーム</p>
+    <input type="button" id="start" value="スタート" onclick="startGame()">
+    【第<span id="num">1</span>問】残り時間：<span id="remaining">---</span> <span id="message"></span>
+
+    <hr>
+
+    <div id="questionArea">
+        <div id="question">　</div>
+        <div id="kanji">　</div>
+    </div>
+    <div id="buttonArea"></div>
+
+</body>
+
+<script>
+    let num, maxTime;
+    let qType;
+    let kIndex, cIndex;
+    let startTime, timer1, timer2;
+    let remaining, messgae;
+    let colors = [
+        ["赤", "#FF0000"],
+        ["緑", "#00FF00"],
+        ["青", "#0000FF"],
+        ["黄", "#FFFF00"],
+        ["水色", "#00FFFF"],
+        ["紫", "#FF00FF"],
+        ["白", "#FFFFFF"]];
+
+    window.onload = init;
+
+    function init() {
+        remaining = document.getElementById("remaining");
+        messgae = document.getElementById("message");
+        for (let i = 0; i < colors.length; i++) {
+            let button = document.createElement("button");
+            button.id = "color_" + i;
+            button.style.backgroundColor = colors[i][1];
+            button.onclick = selectColor;
+            document.getElementById("buttonArea").appendChild(button);
+        }
+        disableButton(true);
+    }
+
+    function disableButton(disabled) {
+        let buttons = document.getElementsByTagName("button");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = disabled;
+        }
+    }
+
+    function setColor() {
+        document.getElementById("num").innerText = num + 1;
+        messgae.innerText = "";
+        qType = Math.floor(Math.random() * 2);
+        let question = document.getElementById("question");
+        if (qType == 0) {
+            question.innerText = "色は？";
+        } else {
+            question.innerText = "読みは？";
+        }
+        kIndex = Math.floor(Math.random() * colors.length);
+        cIndex = Math.floor(Math.random() * (colors.length - 1)) + 1;
+        cIndex = (kIndex + cIndex) % colors.length;
+        let kanji = document.getElementById("kanji");
+        kanji.innerText = colors[kIndex][0];
+        kanji.style.color = colors[cIndex][1];
+        disableButton(false);
+    }
+
+    function startGame() {
+        num = 0;
+        setColor();
+        maxTime = 5;
+        startTime = Date.now();
+        timer1 = setInterval(countTime, 100);
+        document.getElementById("start").disabled = true;
+    }
+
+    function stopGame() {
+        clearInterval(timer1);
+        document.getElementById("start").disabled = false;
+        disableButton(true);
+    }
+
+    function selectColor(event) {
+        let color = event.target.id.split("_")[1];
+        let checkAnswer = false;
+        if ((qType == 0) && (color == cIndex)) {
+            checkAnswer = true;
+        } else if ((qType == 1) && (color == kIndex)) {
+            checkAnswer = true;
+        }
+
+        if (checkAnswer) {
+            messgae.innerText = "正解！！";
+            clearInterval(timer1);
+            disableButton(true);
+            timer2 = setTimeout(function () {
+                num++;
+                setColor();
+                maxTime -= 0.2;
+                if (maxTime < 2) maxTime = 2;
+                startTime = Date.now();
+                timer1 = setInterval(countTime, 100);
+            }, 2000);
+        } else {
+            message.innerText = "間違い！ゲームオーバー！！";
+            stopGame();
+        }
+    }
+
+    function countTime() {
+        let time = (maxTime - (Date.now() - startTime) / 1000).toFixed(3);
+        remaining.innerText = time;
+        if (time < 0) {
+            remaining.innerText = "0.000";
+            messgae.innerText = "時間切れ！ゲームオーバー！！";
+            stopGame();
+        }
+    }
+
+</script>
+
+</html>
