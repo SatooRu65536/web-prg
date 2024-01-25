@@ -1,0 +1,9 @@
+[submodule "final-assignment/jp-castles-site"]
+	path = final-assignment/jp-castles-site
+	url = https://github.com/SatooRu65536/jp-castles-site
+[submodule "final-assignment/jp-castles-api"]
+	path = final-assignment/jp-castles-api
+	url = https://github.com/SatooRu65536/jp-castles-api
+[submodule "final-assignment/jp-castles-upload"]
+	path = final-assignment/jp-castles-upload
+	url = https://github.com/SatooRu65536/jp-castles-upload
