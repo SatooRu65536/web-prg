@@ -1,5 +1,6 @@
 #import "./template.typ" : report,  img
 #show: report.with(
+  subject: "Webプログラミング基礎",
   title: "Castle Datastore", 
   sub-title: "マップから城を探せるアプリ", 
   date: "2024年1月30日", 

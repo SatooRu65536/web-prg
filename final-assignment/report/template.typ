@@ -1,4 +1,5 @@
 #let report(
+  subject: "科目名",
   title: "タイトル",
   sub-title: "サブタイトル",
   date: "2005年1月5日",
@@ -19,6 +20,8 @@
 
   align(center)[
     #v(15%)
+    #text(20pt)[#subject] \
+
     #text(30pt)[#title] \
     #text(15pt)[#sub-title]
     #v(50%)
